@@ -1,5 +1,5 @@
 {
-  "name": "Jen | WordBook",
+  "name": "WordBook",
   "short_name": "WordBook",
   "start_url": "./WordBook.html",
   "display": "standalone",
@@ -19,3 +19,4 @@
   ]
 
 }
+
