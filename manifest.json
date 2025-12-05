@@ -1,7 +1,7 @@
 {
   "name": "Jen | WordBook",
   "short_name": "WordBook",
-  "start_url": "WordBook.html",
+  "start_url": "./WordBook.html",
   "display": "standalone",
   "background_color": "#E8E6E1",
   "theme_color": "#6B6B61",
