@@ -1325,22 +1325,23 @@ code {
 
         <div class="view-container" id="wordBankView">
             
-            <div class="mgmt-header" style="margin-bottom: 10px;">
-                <button class="back-btn" data-target-view="homeView">
-                    <span class="material-icons">arrow_back</span>
-                </button>
-                <h1 style="font-weight: bold; font-family: 'Century Gothic', sans-serif;">WordBook</h1>
-            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; gap: 20px; padding-top: 10px;">
+                
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <button class="back-btn" data-target-view="homeView">
+                        <span class="material-icons">arrow_back</span>
+                    </button>
+                    <h1 style="font-weight: bold; font-family: 'Century Gothic', sans-serif; font-size: 36px; margin: 0; white-space: nowrap;">WordBook</h1>
+                </div>
 
-            <div class="bank-search-row" style="display: flex; justify-content: center;">
-                <div class="bank-search-container">
+                <div class="bank-search-container" style="margin: 0; width: 100%; max-width: 500px;">
                     <span class="material-icons">search</span>
                     <input type="text" class="bank-search-input" id="bankSearchBox" placeholder="Search for a new word...">
                 </div>
-            </div>
-			
 
-           <div class="results-controls">
+            </div>
+
+            <div class="results-controls">
                 <div class="expand-with">
                     <label>Expand with:</label>
                     <input type="text" class="expand-tags-input" id="bankTagFilter" placeholder="type tags here">
@@ -3646,6 +3647,7 @@ function initTagAutocomplete(inputId, suggestionId) {
 </body>
 
 </html>
+
 
 
 
