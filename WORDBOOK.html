@@ -1279,7 +1279,12 @@ code {
                         <div class="wordbook">WORDBOOK</div>
                     </div>
                 </div>
-
+			<div style="text-align: center; margin-top: 10px;">
+    <button onclick="window.triggerGoogleSync()" style="background: white; border: 1px solid #b8866f; color: #b8866f; padding: 5px 15px; border-radius: 20px; cursor: pointer; font-family: 'Century Gothic'; font-size: 12px;">
+        <span class="material-icons" style="font-size: 14px; vertical-align: middle;">sync</span> 
+        Sync / Login
+    </button>
+</div>
                 <div class="home-search-wrapper">
                     <div class="search-container">
                         <span class="material-icons play-icon dropdown-icon" id="dropdownToggle">arrow_right</span>
@@ -1634,11 +1639,14 @@ code {
         // Import Firebase modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { 
-            getAuth, 
-            signInAnonymously, 
-            signInWithCustomToken, 
-            onAuthStateChanged 
-        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    getAuth, 
+    signInAnonymously, 
+    signInWithCustomToken, 
+    onAuthStateChanged,
+    GoogleAuthProvider,
+    signInWithPopup,
+    linkWithPopup
+} from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { 
             getFirestore, 
             doc, 
@@ -1708,6 +1716,47 @@ window.triggerAutoTag = function(mode) {
         
         setLogLevel('Debug');
 
+
+		// --- SAM'S SYNC SYSTEM ---
+        const provider = new GoogleAuthProvider();
+
+        async function triggerGoogleSync() {
+            if (!auth.currentUser) return;
+
+            try {
+                // Scenario A: You are Anonymous (Localhost) -> Link data to Google
+                if (auth.currentUser.isAnonymous) {
+                    loadingOverlay.classList.add('active');
+                    loadingMessage.textContent = 'Linking your data to Google...';
+                    
+                    const result = await linkWithPopup(auth.currentUser, provider);
+                    const user = result.user;
+                    console.log("✅ Success! Data linked to:", user.email);
+                    alert(`Success! Your Wordbook is now linked to ${user.email}. You can now view this data on Vercel!`);
+                } 
+                // Scenario B: You are not logged in (Vercel) -> Log in to find data
+                else {
+                    const result = await signInWithPopup(auth, provider);
+                    console.log("✅ Logged in as:", result.user.email);
+                }
+            } catch (error) {
+                console.error("Sync Error:", error);
+                if (error.code === 'auth/credential-already-in-use') {
+                    // This happens if you already used this email on another device.
+                    // We just switch to that account.
+                    alert("Switching to your main Google Account...");
+                    await signInWithPopup(auth, provider);
+                } else {
+                    alert("Sync failed: " + error.message);
+                }
+            } finally {
+                loadingOverlay.classList.remove('active');
+            }
+        }
+        
+        // Expose to window so our HTML button can see it
+        window.triggerGoogleSync = triggerGoogleSync;
+	
         let userId = null;
         let unsubscribes = [];
         let actionListenersAttached = false; // <-- **FIX** Flag to prevent re-attaching listeners
@@ -3583,4 +3632,5 @@ function initTagAutocomplete(inputId, suggestionId) {
 </script>
 
 </body>
+
 </html>
